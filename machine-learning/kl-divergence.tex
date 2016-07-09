@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{KL Divergence and Entropy}
+\author{Bikramjot Hanzra}
+\date{July 2016}
+
+%\usepackage{natbib}
+%\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{parskip}
+
+\setcounter{MaxMatrixCols}{20}
+
+\begin{document}
+
+\maketitle
+
+KL Divergence is a measure that can be used to compare 2 distributions i.e. how similar or dissimilar they are. In these notes we only consider discrete distribution, although there is not much change for continuous distribution. It's just that we go integration instead of summation. The KL Divergence between 2 distribution $P(x)$ and $Q(x)$ is given by -- 
+
+\begin{equation}
+\label{kld}
+D_{KL}(P || Q) = \sum_{x}P(x)\log\frac{P(x)}{Q(x)}
+\end{equation}
+
+A few quick notes on KL divergence is that --
+
+\begin{itemize}
+    \item KL Divergence is always non-negative.
+    \item KL Divergence is not a true distance metric as $D_{KL}(P || Q)$ is not the same as $D_{KL}(Q || P)$.
+\end{itemize}
+
+Entropy is a measure of randomness in a distribution and is given by --
+
+\begin{equation}
+\label{entropy}
+H(x) = -\sum_{x}P(x)\log P(x)
+\end{equation}
+
+
+Equation \ref{kld} and \ref{entropy} look pretty similar. So, the question we are trying to ask here is that is there a relationship between the KL Divergence and Entrophy?
+
+The answer is yes. Entropy of a distribution can be derived from KL Divergence whenwe measure how far is the distribution away from the uniform distribution $\mathcal{U}$. So, the entropy of a distribution $P$ can be derived using KL Divergence between the distribution $P$ and the uniform distribution $\mathcal{U}$ as --
+
+\begin{align}
+D_{KL}(P || \mathcal{U}) = \sum_{x}P(x)\log\frac{P(x)}{U(x)} \\
+D_{KL}(P || \mathcal{U}) = \sum_{x}P(x)\log P(x) - \sum_{x}P(x)\log \mathcal{U}(x)\\
+D_{KL}(P || \mathcal{U}) = -H(x) - \sum_{x}P(x)\log \mathcal{U}(x) \label{eqn:dl:3}
+\end{align}
+
+If there are $m$ possibilities, then the uniform distribution $\mathcal{U}$ is given as --
+
+\begin{equation}
+\mathcal{U}(x) = \frac{1}{m}
+\end{equation}
+
+Substituting this is Equation \ref{eqn:dl:3}, we get --
+
+\begin{align}
+D_{KL}(P || \mathcal{U}) = -H(x) - \sum_{x}P(x)\log \mathcal{U}(x) \label{eqn:dl:4} \\
+D_{KL}(P || \mathcal{U}) = -H(x) - \sum_{x}P(x)\log \frac{1}{m} \label{eqn:dl:5} \\
+D_{KL}(P || \mathcal{U}) = -H(x) - \log \frac{1}{m}\sum_{x}P(x) \label{eqn:dl:6} \\
+D_{KL}(P || \mathcal{U}) = -H(x) + \log m \label{eqn:dl:7} \\
+\end{align}
+
+In Equation \ref{eqn:dl:7}, $\log m$ is a constant. From this equation, we can infer that the KL divergence between the distribution $P$ and the uniform distribution $\mathcal{U}$ is the negative entropy plus a constant term $\log m$.
+
+\end{document}
