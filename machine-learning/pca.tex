@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{PCA Vectorized Derivation}
+\author{Bikramjot Hanzra}
+\date{}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{listings}
+\usepackage{parskip}
+
+
+\setcounter{MaxMatrixCols}{20}
+
+\begin{document}
+
+\maketitle
+
+In PCA, we want to find a set of orthogonal basis vectors that maximize variance of the projections of the data along each subsequent dimension. Let $\mathbf{X}$ be the $n \times d$ matrix where each row is a data point and $\mathbf{w}$ be the $d \times 1$ dimension column vector. The optimization problem can be formulated as --
+
+\begin{equation}
+J(\mathbf{w}) = \arg \max_{\mathbf{w}} ||\mathbf{X \cdot w}||^2 \text{subjected to} ||\mathbf{w}|| = 1
+\end{equation}
+
+Introducing lagrange multiplier $\lambda$ we get --
+
+\begin{align}
+J(\mathbf{w}) = \arg \max_{\mathbf{w}} ||\mathbf{X \cdot w}||^2 + \lambda(1 - ||\mathbf{w}||^2) \\
+J(\mathbf{w}) = \arg \max_{\mathbf{w}} \mathbf{(X \cdot w)^\intercal } \cdot \mathbf{(X \cdot w)} + \lambda(1-\mathbf{w^\intercal} \cdot \mathbf{w})  \\
+J(\mathbf{w}) = \arg \max_{\mathbf{w}} \mathbf{w^\intercal \cdot X^\intercal \cdot X \cdot w} + \lambda(1-\mathbf{w^\intercal} \cdot \mathbf{w})  
+\end{align}
+
+The Jacobian $\nabla J(\mathbf{w})$ is given by --
+
+\begin{align}
+\nabla J(\mathbf{w}) =  \mathbf{(X^\intercal X \cdot w)}^\intercal + \mathbf{w^\intercal \cdot X^\intercal \cdot X} -\lambda \mathbf{w^\intercal} - \lambda \mathbf{w^\intercal} \\
+\nabla J(\mathbf{w}) =  2\mathbf{(X^\intercal X \cdot w)}^\intercal -2\lambda \mathbf{w^\intercal} 
+\end{align}
+ 
+The minima will occur where $\nabla J(\mathbf{w}) = 0$.
+
+\begin{align}
+2\mathbf{(X^\intercal X \cdot w)}^\intercal -2\lambda \mathbf{w^\intercal} = 0 \\
+\mathbf{(X^\intercal X \cdot w)}^\intercal = \lambda \mathbf{w^\intercal} \\
+\mathbf{X^\intercal X \cdot w} = \lambda \mathbf{w} \label{result}\\
+\end{align}
+
+From Equation \ref{result} it is easy to see that the orthogonal basis vectors are the eigenvalues of the scatter matrix $\mathbf{(X^\intercal X)}$. This can be implemented in MATLAB using --
+
+\begin{lstlisting}
+[eigvec, eigval] = eig(X'*X)
+\end{lstlisting}
+
+\end{document}
